@@ -1,0 +1,49 @@
+
+x <- read.table(file.choose(), header = TRUE, sep = ",")
+
+library(plyr)
+
+y <- ddply(x, "Sex", transform, Grade.Average = mean(Grade))
+
+write.table(y, "Sorted_Average")
+write.table(y, "Sorted_Average", sep = ",")
+
+newx <- subset(x, grepl("[iI]", x$Name))
+
+write.table(newx, "DataSubset", sep = ",")
+
+gender_mean <- ddply(
+  x,
+  "Sex",
+  summarise,
+  GradeAverage = mean(Grade, na.rm = TRUE)
+)
+
+write.table(
+  gender_mean,
+  file = "gender_mean.txt",
+  sep = "\t",
+  row.names = FALSE
+)
+
+write.csv(
+  newx$Name,
+  file = "i_students.csv",
+  row.names = FALSE,
+  quote = FALSE
+)
+
+write.csv(
+  newx,
+  file = "i_students_full.csv",
+  row.names = FALSE
+)
+
+file.exists("Sorted_Average")
+file.exists("DataSubset")
+file.exists("gender_mean.txt")
+file.exists("i_students.csv")
+file.exists("i_students_full.csv")
+
+gender_mean
+newx
